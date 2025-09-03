@@ -52,7 +52,6 @@ const Timeline: React.FC = () => {
         </div>
 
         <div className="relative">
-          {/* Línea central */}
           <div className="absolute left-1/2 transform -translate-x-px h-full w-0.5 bg-gradient-to-b from-rose-300 via-pink-300 to-rose-300"></div>
 
           {events.map((event, index) => (
@@ -66,13 +65,9 @@ const Timeline: React.FC = () => {
                 </div>
               </div>
 
-              {/* Icono central */}
               <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gradient-to-br from-rose-500 to-pink-600 rounded-full flex items-center justify-center text-white shadow-lg z-10 hover:scale-110 transition-transform duration-300">
                 {event.icon}
               </div>
-
-              {/* Espacio vacío en el lado opuesto */}
-              <div className="w-5/12"></div>
             </div>
           ))}
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { X, Heart, Camera, Filter, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { useImageGallery } from '../hooks/useImageGallery';
 
 interface GalleryImage {
   id: number;
@@ -13,74 +14,67 @@ const Gallery: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
   const imagesPerPage = 12;
+  const { availableTags, getImagesFromBucket } = useImageGallery();
 
   // Simulando una colección grande de imágenes con diferentes categorías
-  const allImages: GalleryImage[] = useMemo(() => {
-    const categories = [
-      { name: 'compromiso', count: 45 },
-      { name: 'preboda', count: 38 },
-      { name: 'familia', count: 52 },
-      { name: 'amigos', count: 41 },
-      { name: 'viajes', count: 35 },
-      { name: 'momentos', count: 29 }
-    ];
+  const [allImages, setAllImages] = useState<GalleryImage[]>([]);
 
-    const baseImages = [
-      'https://images.pexels.com/photos/1729931/pexels-photo-1729931.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/1445253/pexels-photo-1445253.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/1444442/pexels-photo-1444442.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/1024960/pexels-photo-1024960.jpeg?auto=compress&cs=tinysrgb&w=800',
-      'https://images.pexels.com/photos/1729931/pexels-photo-1729931.jpeg?auto=compress&cs=tinysrgb&w=400',
-      'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=400',
-    ];
-
+  React.useEffect(() => {
     let imageId = 1;
-    const images: GalleryImage[] = [];
+    const fetchTagsAndImages = async () => {     
+      const tags = await availableTags();
+      const images: GalleryImage[] = await getImagesFromBucket({ status: "approved" }).then(images => {
+        const mappedImages: GalleryImage[] = images.map((img, idx) => ({
+          id: typeof img.id === 'number' ? img.id : idx + 1,
+          url: img.url,
+          category: Array.isArray(img.tags) ? img.tags.join(', ') : img.tags,
+          title: img.name,
+          date: typeof img.uploadDate === 'string' ? img.uploadDate : img.uploadDate?.toString() ?? ''
+        }));
+        return mappedImages;
+      });
 
-    categories.forEach(category => {
-      for (let i = 0; i < category.count; i++) {
-        images.push({
-          id: imageId++,
-          url: baseImages[i % baseImages.length],
-          category: category.name,
-          title: `${category.name.charAt(0).toUpperCase() + category.name.slice(1)} ${i + 1}`,
-          date: `2023-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`
-        });
-      }
-    });
+      // tags.map(tag => {
+        // for (let i = 0; i < images.length; i++) {
+          console.log(images);
+          
+          // images.push({
+          //   id: imageId++,
+          //   url: "images[i].url",
+          //   // category: tags.join(', '),
+          //   category: "asdf",
+          //   // title: `${tags.join(', ').charAt(0).toUpperCase() + tags.join(', ').slice(1)} ${i + 1}`,
+          //   title: "",
+          //   date: `2023-${Math.floor(Math.random() * 12) + 1}-${Math.floor(Math.random() * 28) + 1}`
+          // });
+        // }
+      // });
 
-    return images;
+      setAllImages(images);
+    };
+
+    fetchTagsAndImages();
   }, []);
 
   const categories = [
     { id: 'all', name: 'Todas', count: allImages.length },
-    { id: 'compromiso', name: 'Compromiso', count: allImages.filter(img => img.category === 'compromiso').length },
-    { id: 'preboda', name: 'Pre-boda', count: allImages.filter(img => img.category === 'preboda').length },
-    { id: 'familia', name: 'Familia', count: allImages.filter(img => img.category === 'familia').length },
-    { id: 'amigos', name: 'Amigos', count: allImages.filter(img => img.category === 'amigos').length },
-    { id: 'viajes', name: 'Viajes', count: allImages.filter(img => img.category === 'viajes').length },
-    { id: 'momentos', name: 'Momentos', count: allImages.filter(img => img.category === 'momentos').length }
+    { id: 'compromiso', name: 'Compromiso', count: allImages.filter(img => img.category.includes('compromiso')).length },
+    { id: 'preboda', name: 'Pre-boda', count: allImages.filter(img => img.category.includes('preboda')).length },
+    { id: 'familia', name: 'Familia', count: allImages.filter(img => img.category.includes('familia')).length },
+    { id: 'amigos', name: 'Amigos', count: allImages.filter(img => img.category.includes('amigos')).length },
+    { id: 'asdf', name: 'ASDF', count: allImages.filter(img => img.category.includes('asdf')).length },
+    { id: 'momentos', name: 'Momentos', count: allImages.filter(img => img.category.includes('momentos')).length }
   ];
 
   // Filtrar imágenes
   const filteredImages = useMemo(() => {
     let filtered = selectedCategory === 'all' 
       ? allImages 
-      : allImages.filter(img => img.category === selectedCategory);
-
-    if (searchTerm) {
-      filtered = filtered.filter(img => 
-        img.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        img.category.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+      : allImages.filter(img => img.category.includes(selectedCategory));
 
     return filtered;
-  }, [allImages, selectedCategory, searchTerm]);
+  }, [allImages, selectedCategory]);
 
   // Paginación
   const totalPages = Math.ceil(filteredImages.length / imagesPerPage);
@@ -98,15 +92,20 @@ const Gallery: React.FC = () => {
     document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <section className="py-20 px-6 bg-gradient-to-b from-amber-50 via-orange-50 to-yellow-50" id="gallery">
       <div className="max-w-7xl mx-auto">
         {/* Header con estilo vintage */}
-        <div className="text-center mb-16 relative">
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-4">
-            <Camera className="w-12 h-12 text-amber-600 opacity-20" />
-          </div>
-          
+        <div className="text-center mb-16 relative">          
           <h2 className="text-5xl md:text-6xl font-light text-amber-900 mb-6 relative">
             <span className="relative z-10 bg-gradient-to-r from-amber-800 to-orange-800 bg-clip-text text-transparent">
               Álbum de Recuerdos
@@ -129,20 +128,6 @@ const Gallery: React.FC = () => {
 
         {/* Controles de filtro y búsqueda */}
         <div className="mb-12 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-amber-200">
-          {/* Barra de búsqueda */}
-          <div className="mb-6">
-            <div className="relative max-w-md mx-auto">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-amber-600" />
-              <input
-                type="text"
-                placeholder="Buscar en nuestros recuerdos..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border-2 border-amber-300 rounded-full focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors bg-white/90 text-amber-900 placeholder-amber-600"
-              />
-            </div>
-          </div>
-
           {/* Filtros de categoría */}
           <div className="flex flex-wrap justify-center gap-3">
             {categories.map((category) => (
@@ -178,9 +163,7 @@ const Gallery: React.FC = () => {
                 transform: `rotate(${(index % 4 - 1.5) * 2}deg)`,
               }}
             >
-              {/* Marco vintage */}
               <div className="bg-gradient-to-br from-amber-100 to-orange-200 p-4 shadow-2xl hover:shadow-3xl transition-all duration-500 group-hover:scale-105 group-hover:rotate-0 border-4 border-amber-200">
-                {/* Imagen */}
                 <div className="relative overflow-hidden bg-white p-2">
                   <img
                     src={image.url}
@@ -188,47 +171,34 @@ const Gallery: React.FC = () => {
                     className="w-full h-64 object-cover sepia-[0.3] contrast-110 brightness-95 group-hover:sepia-0 group-hover:contrast-100 group-hover:brightness-100 transition-all duration-500"
                   />
                   
-                  {/* Overlay vintage */}
                   <div className="absolute inset-0 bg-gradient-to-t from-amber-900/20 via-transparent to-amber-100/10 group-hover:opacity-0 transition-opacity duration-500"></div>
                   
-                  {/* Efecto de brillo */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </div>
 
-                {/* Etiqueta vintage */}
                 <div className="mt-3 text-center">
-                  <h3 className="text-sm font-serif text-amber-900 mb-1">{image.title}</h3>
-                  <p className="text-xs text-amber-700 opacity-80">{image.date}</p>
+                  <h3 className="text-sm font-serif text-amber-900 mb-1 truncate">{image.title}</h3>
+                  <p className="text-xs text-amber-700 opacity-80">{formatDate(image.date)}</p>
                 </div>
 
-                {/* Esquinas decorativas */}
                 <div className="absolute top-2 left-2 w-3 h-3 border-l-2 border-t-2 border-amber-600 opacity-60"></div>
                 <div className="absolute top-2 right-2 w-3 h-3 border-r-2 border-t-2 border-amber-600 opacity-60"></div>
                 <div className="absolute bottom-2 left-2 w-3 h-3 border-l-2 border-b-2 border-amber-600 opacity-60"></div>
                 <div className="absolute bottom-2 right-2 w-3 h-3 border-r-2 border-b-2 border-amber-600 opacity-60"></div>
-              </div>
-
-              {/* Icono de corazón flotante */}
-              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="bg-red-500 rounded-full p-2 shadow-lg">
-                  <Heart className="w-4 h-4 text-white fill-current" />
-                </div>
               </div>
             </div>
           ))}
         </div>
 
         {/* Información y paginación */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-amber-200">
+        {/* <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-amber-200">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            {/* Información de resultados */}
             <div className="text-amber-800 font-serif">
               <p className="text-sm">
                 Mostrando {startIndex + 1}-{Math.min(startIndex + imagesPerPage, filteredImages.length)} de {filteredImages.length} recuerdos
               </p>
             </div>
 
-            {/* Controles de paginación */}
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button
@@ -278,7 +248,7 @@ const Gallery: React.FC = () => {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Modal para imagen ampliada */}
         {selectedImage && (

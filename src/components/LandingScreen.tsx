@@ -7,17 +7,19 @@ interface LandingScreenProps {
 
 const LandingScreen: React.FC<LandingScreenProps> = ({ onEnter }) => {
   const [isOpening, setIsOpening] = useState(false);
+  const [removeSeal, setRemoveSeal] = useState(false);
   const [showInvitation, setShowInvitation] = useState(false);
 
   const handleEnvelopeClick = () => {
     if (!isOpening) {
+      setRemoveSeal(true);
       setIsOpening(true);
       setTimeout(() => {
         setShowInvitation(true);
       }, 1200);
       setTimeout(() => {
         onEnter();
-      }, 3500);
+      }, 6000);
     }
   };
 
@@ -45,7 +47,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onEnter }) => {
         {/* Título inicial */}
         <div className={`mb-12 transition-all duration-1000 ${isOpening ? 'opacity-0 transform -translate-y-8' : 'opacity-100'}`}>
           <h1 className="text-4xl md:text-6xl font-light text-rose-800 mb-4 tracking-wide">
-            María & Carlos
+            Mónica & Jose Manuel
           </h1>
           <div className="flex items-center justify-center gap-2 mb-6">
             <div className="w-12 h-px bg-gradient-to-r from-transparent via-rose-400 to-transparent"></div>
@@ -73,7 +75,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onEnter }) => {
             <div className="absolute bottom-0 w-full h-32 bg-gradient-to-br from-rose-200 to-rose-300 rounded-lg shadow-2xl border-2 border-rose-300">
               {/* Decoración del sobre */}
               <div className="absolute inset-2 border border-rose-400 rounded-md opacity-50"></div>
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+              <div className={`absolute bottom-4 left-1/2 transform -translate-x-1/2 z-40 ${removeSeal ? 'opacity-0' : ''}`}>
                 <div className="w-8 h-8 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center">
                   <Heart className="w-4 h-4 text-white" />
                 </div>
@@ -82,11 +84,14 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onEnter }) => {
 
             {/* Tapa del sobre */}
             <div 
-              className={`absolute top-0 w-full h-24 bg-gradient-to-br from-rose-300 to-rose-400 transition-all duration-1200 ease-out origin-bottom shadow-xl ${
-                isOpening ? 'transform -rotate-180 translate-y-8' : ''
+              className={`rotate-180 absolute top-0 w-full h-24 bg-gradient-to-br from-rose-300 to-rose-400 transition-transform duration-1000 ease-out origin-bottom shadow-xl ${
+                isOpening ? '-translate-y-6' : ''
               }`}
               style={{
                 clipPath: 'polygon(0 100%, 50% 0, 100% 100%)',
+                top: isOpening ? '-20px' : '-23px',
+                borderRadius: '9px',
+                transform: isOpening ? 'rotateX(0deg)' : 'rotateX(180deg)'
               }}
             >
               {/* Brillo en la tapa */}
@@ -99,31 +104,11 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onEnter }) => {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
             )}
           </div>
-
-          {/* Partículas que salen del sobre */}
-          {isOpening && (
-            <div className="absolute inset-0 pointer-events-none">
-              {[...Array(12)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute animate-bounce opacity-80"
-                  style={{
-                    left: `${45 + Math.random() * 10}%`,
-                    top: `${30 + Math.random() * 20}%`,
-                    animationDelay: `${0.5 + Math.random() * 0.8}s`,
-                    animationDuration: `${1 + Math.random() * 0.5}s`
-                  }}
-                >
-                  <Sparkles className="w-3 h-3 text-yellow-400" />
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Invitación que aparece */}
         {showInvitation && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+          <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm">
             <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl border-2 border-rose-200 max-w-md mx-4 animate-fadeInUp">
               <div className="text-center">
                 <div className="mb-6">
@@ -133,11 +118,11 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onEnter }) => {
                 </div>
                 
                 <div className="space-y-3 text-gray-700 mb-6">
-                  <p className="text-lg font-medium">María & Carlos</p>
+                  <p className="text-lg font-medium">Mónica & Jose Manuel</p>
                   <p className="text-sm">se casan el</p>
-                  <p className="text-xl font-semibold text-rose-600">15 de Agosto, 2024</p>
-                  <p className="text-sm">4:00 PM</p>
-                  <p className="text-sm text-gray-600">Jardín de los Sueños, Madrid</p>
+                  <p className="text-xl font-semibold text-rose-600">20 de Septiembre, 2025</p>
+                  <p className="text-sm">12:45 PM</p>
+                  <p className="text-sm text-gray-600">Ajuntament de, Plaça de la Vila, 46, 08760 Martorell, Barcelona</p>
                 </div>
 
                 <div className="flex items-center justify-center gap-2 text-rose-500">

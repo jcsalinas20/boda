@@ -30,9 +30,9 @@ const Navigation: React.FC = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <Heart className={`w-6 h-6 ${isScrolled ? 'text-rose-500' : 'text-white'}`} />
-            <span className={`text-lg font-medium ${isScrolled ? 'text-gray-800' : 'text-white'}`}>
-              M & C
+            <Heart className={`w-6 h-6 ${isScrolled ? 'text-rose-500' : 'text-rose-500'}`} />
+            <span className={`text-lg font-medium ${isScrolled ? 'text-gray-800' : 'text-gray-800'}`}>
+              M & JM
             </span>
           </div>
 
@@ -40,16 +40,16 @@ const Navigation: React.FC = () => {
           <div className="hidden md:flex items-center space-x-8">
             {[
               { label: 'Inicio', id: 'home' },
-              { label: 'Historia', id: 'timeline' },
-              { label: 'Galería', id: 'gallery' },
               { label: 'Detalles', id: 'details' },
-              { label: 'RSVP', id: 'rsvp' }
+              { label: 'Galería', id: 'gallery' },
+              // { label: 'Historia', id: 'timeline' },
+              // { label: 'RSVP', id: 'rsvp' }
             ].map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
                 className={`text-sm font-medium hover:text-rose-500 transition-colors ${
-                  isScrolled ? 'text-gray-700' : 'text-white hover:text-rose-200'
+                  isScrolled ? 'text-gray-700' : 'text-gray-700 hover:text-rose-200'
                 }`}
               >
                 {item.label}
@@ -60,7 +60,7 @@ const Navigation: React.FC = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 rounded-lg ${isScrolled ? 'text-gray-700' : 'text-white'}`}
+            className={`md:hidden p-2 rounded-lg text-gray-700`}
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -71,10 +71,10 @@ const Navigation: React.FC = () => {
           <div className="md:hidden mt-4 bg-white rounded-2xl shadow-xl py-4 border border-gray-100">
             {[
               { label: 'Inicio', id: 'home' },
-              { label: 'Historia', id: 'timeline' },
-              { label: 'Galería', id: 'gallery' },
               { label: 'Detalles', id: 'details' },
-              { label: 'RSVP', id: 'rsvp' }
+              { label: 'Galería', id: 'gallery' },
+              // { label: 'Historia', id: 'timeline' },
+              // { label: 'RSVP', id: 'rsvp' }
             ].map((item) => (
               <button
                 key={item.id}

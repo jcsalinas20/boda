@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Clock, Phone, Mail, Car, Gift } from 'lucide-react';
+import { MapPin, Clock, Phone, Mail, Car, Gift, QrCode } from 'lucide-react';
 
 const EventDetails: React.FC = () => {
   return (
@@ -27,7 +27,7 @@ const EventDetails: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-medium text-gray-800">Hora</h4>
-                  <p className="text-gray-600">4:00 PM</p>
+                  <p className="text-gray-600">12:45 PM</p>
                 </div>
               </div>
 
@@ -37,8 +37,8 @@ const EventDetails: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-medium text-gray-800">Ubicación</h4>
-                  <p className="text-gray-600">Jardín de los Sueños</p>
-                  <p className="text-gray-600">Calle de la Felicidad 123, Madrid</p>
+                  <p className="text-gray-600">Ajuntament de, Plaça de la Vila, 46,</p>
+                  <p className="text-gray-600">08760 Martorell, Barcelona</p>
                 </div>
               </div>
 
@@ -75,8 +75,18 @@ const EventDetails: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-medium text-gray-800">Ubicación</h4>
-                  <p className="text-gray-600">Salón de Eventos Majestic</p>
-                  <p className="text-gray-600">Avenida del Amor 456, Madrid</p>
+                  <p className="text-gray-600">Km.4, Ctra. Martorell – Gelida,</p>
+                  <p className="text-gray-600">08769 Castellví de Rosanes, Barcelona</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="bg-green-600 rounded-full p-2 mt-1">
+                  <Car className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-800">Estacionamiento</h4>
+                  <p className="text-gray-600">Estacionamiento gratuito disponible</p>
                 </div>
               </div>
 
@@ -95,15 +105,20 @@ const EventDetails: React.FC = () => {
 
         {/* Información de contacto */}
         <div className="mt-12 bg-gray-50 rounded-3xl p-8 text-center">
-          <h3 className="text-2xl font-semibold text-gray-800 mb-6">¿Preguntas?</h3>
+          <h3 className="text-2xl font-semibold text-gray-800 mb-6">¿Quieres aportar las fotos que has tomado?</h3>
+          <h4 className="text-2xl font-semibold text-gray-800 mb-6"></h4>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <div className="flex items-center gap-3">
-              <Phone className="w-5 h-5 text-rose-500" />
-              <span className="text-gray-700">+34 123 456 789</span>
+            <div className="flex items-center gap-1">
+                <span className='font-bold text-lg text-gray-700'>Envialas a:</span>
+                <Mail className="w-5 h-5 text-rose-500" /> 
+                <span className='text-gray-700'>jcsalinasn20@gmail.com</span>
             </div>
             <div className="flex items-center gap-3">
-              <Mail className="w-5 h-5 text-rose-500" />
-              <span className="text-gray-700">maria.carlos@boda2024.com</span>
+                <Phone className="w-5 h-5 text-rose-500" /> 
+                <span className='text-gray-700'>+34 691 72 19 11</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="font-bold text-lg text-gray-700">O escanea el código QR</span>
             </div>
           </div>
         </div>

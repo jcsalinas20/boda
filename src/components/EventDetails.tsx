@@ -86,7 +86,7 @@ const EventDetails: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="font-medium text-gray-800">Estacionamiento</h4>
-                  <p className="text-gray-600">Estacionamiento gratuito disponible</p>
+                  <p className="text-gray-600">Estacionamiento gratuito en el restaurante</p>
                 </div>
               </div>
             </div>

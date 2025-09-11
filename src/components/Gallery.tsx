@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { X, Heart, Camera, Filter, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { X, Heart, Camera, Filter, ChevronLeft, ChevronRight, Search, DownloadCloud } from 'lucide-react';
 import { useImageGallery } from '../hooks/useImageGallery';
 
 interface GalleryImage {
@@ -101,6 +101,26 @@ const Gallery: React.FC = () => {
     return `${day}/${month}/${year}`;
   };
 
+  async function downloadImage(event: React.MouseEvent<HTMLButtonElement>, url: string, filename: string): Promise<void> {
+      event.stopPropagation();
+      event.preventDefault();
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+      } catch (error) {
+        console.error("Error al descargar la imagen:", error);
+      }
+    }
   return (
     <section className="py-20 px-6 bg-gradient-to-b from-amber-50 via-orange-50 to-yellow-50" id="gallery">
       <div className="max-w-7xl mx-auto">
@@ -163,6 +183,12 @@ const Gallery: React.FC = () => {
                 transform: `rotate(${(index % 4 - 1.5) * 2}deg)`,
               }}
             >
+              <button
+                className="download-btn absolute top-0 right-0 z-50 flex items-center justify-center w-10 h-10 rounded-bl-xl bg-blue-200 hover:bg-blue-300 transition"
+                onClick={(e) => downloadImage(e, image.url, image.title)}
+              >
+                <DownloadCloud className="w-6 h-6 text-blue-700" />
+              </button>
               <div className="bg-gradient-to-br from-amber-100 to-orange-200 p-4 shadow-2xl hover:shadow-3xl transition-all duration-500 group-hover:scale-105 group-hover:rotate-0 border-4 border-amber-200">
                 <div className="relative overflow-hidden bg-white p-2">
                   <img

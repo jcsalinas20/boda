@@ -89,16 +89,6 @@ const EventDetails: React.FC = () => {
                   <p className="text-gray-600">Estacionamiento gratuito disponible</p>
                 </div>
               </div>
-
-              <div className="flex items-start gap-4">
-                <div className="bg-green-600 rounded-full p-2 mt-1">
-                  <Gift className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-800">Código de vestimenta</h4>
-                  <p className="text-gray-600">Formal / Etiqueta</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -111,14 +101,18 @@ const EventDetails: React.FC = () => {
             <div className="flex items-center gap-1">
                 <span className='font-bold text-lg text-gray-700'>Envialas a:</span>
                 <Mail className="w-5 h-5 text-rose-500" /> 
-                <span className='text-gray-700'>jcsalinasn20@gmail.com</span>
+                <span className='text-gray-700'><a href='mailto:boda.monica.josemanuel@gmail.com?subject=Imágenes boda Mónica y Jose Manuel'>boda.monica.josemanuel@gmail.com</a></span>
             </div>
             <div className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-rose-500" /> 
                 <span className='text-gray-700'>+34 691 72 19 11</span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="font-bold text-lg text-gray-700">O escanea el código QR</span>
+              <span className="font-bold text-lg text-gray-700">O sube tus
+                <a href='/upload'>
+                  <button className='btn-upload'>Imágenes</button>
+                </a>
+              </span>
             </div>
           </div>
         </div>

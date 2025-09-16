@@ -150,17 +150,17 @@ html {
 }
 
 .btn-upload {
-    background-color: #00f6ff;
+    background-color: #fffbd2;
     padding: .4rem 1.2rem;
     border-radius: 9px;
-    border: 2px solid #3fc7db;
+    border: 2px solid #f1ecb3;
     margin-left: 8px;
     box-shadow: 0 0 5px 0px #00000057;
     transition: .3s;
 }
 
 .btn-upload:hover {
-  background-color: #3fc7db !important;
+  background-color: #f1ecb3 !important;
 }
 
 .download-btn {

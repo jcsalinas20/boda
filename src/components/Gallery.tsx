@@ -37,7 +37,6 @@ const Gallery: React.FC = () => {
 
       // tags.map(tag => {
         // for (let i = 0; i < images.length; i++) {
-          console.log(images);
           
           // images.push({
           //   id: imageId++,
@@ -63,7 +62,6 @@ const Gallery: React.FC = () => {
     { id: 'preboda', name: 'Pre-boda', count: allImages.filter(img => img.category.includes('preboda')).length },
     { id: 'familia', name: 'Familia', count: allImages.filter(img => img.category.includes('familia')).length },
     { id: 'amigos', name: 'Amigos', count: allImages.filter(img => img.category.includes('amigos')).length },
-    { id: 'asdf', name: 'ASDF', count: allImages.filter(img => img.category.includes('asdf')).length },
     { id: 'momentos', name: 'Momentos', count: allImages.filter(img => img.category.includes('momentos')).length }
   ];
 
@@ -173,7 +171,14 @@ const Gallery: React.FC = () => {
         </div>
 
         {/* Grid de imágenes con estilo vintage */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+          {filteredImages.length === 0 && 
+            <div className="grid grid-cols-1 gap-6 mb-12">
+              <p className="text-center text-amber-800 font-serif italic text-xl">Las imágenes se publicarán al día siguiente de la celebración.</p>
+              <p className="text-center text-amber-800 font-serif italic text-xl">Puedes aportar tus fotos al número +34 691 72 19 11 o al correo boda.monica.josemanuel@gmail.com.</p>
+            </div>
+          }
+          {filteredImages.length > 0 &&
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
           {filteredImages.map((image, index) => (
             <div
               key={image.id}
@@ -214,67 +219,7 @@ const Gallery: React.FC = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Información y paginación */}
-        {/* <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border-2 border-amber-200">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-amber-800 font-serif">
-              <p className="text-sm">
-                Mostrando {startIndex + 1}-{Math.min(startIndex + imagesPerPage, filteredImages.length)} de {filteredImages.length} recuerdos
-              </p>
-            </div>
-
-            {totalPages > 1 && (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-full bg-amber-600 text-white disabled:bg-amber-300 disabled:cursor-not-allowed hover:bg-amber-700 transition-colors"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-
-                <div className="flex gap-1">
-                  {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                    let pageNum;
-                    if (totalPages <= 5) {
-                      pageNum = i + 1;
-                    } else if (currentPage <= 3) {
-                      pageNum = i + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNum = totalPages - 4 + i;
-                    } else {
-                      pageNum = currentPage - 2 + i;
-                    }
-
-                    return (
-                      <button
-                        key={pageNum}
-                        onClick={() => handlePageChange(pageNum)}
-                        className={`w-10 h-10 rounded-full text-sm font-medium transition-colors ${
-                          currentPage === pageNum
-                            ? 'bg-amber-600 text-white'
-                            : 'bg-white text-amber-800 hover:bg-amber-100 border border-amber-300'
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="p-2 rounded-full bg-amber-600 text-white disabled:bg-amber-300 disabled:cursor-not-allowed hover:bg-amber-700 transition-colors"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            )}
-          </div>
-        </div> */}
+        </div>}
 
         {/* Modal para imagen ampliada */}
         {selectedImage && (
